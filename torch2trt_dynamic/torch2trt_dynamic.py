@@ -6,6 +6,7 @@ from packaging import version
 from .calibration import (DEFAULT_CALIBRATION_ALGORITHM, DatasetCalibrator,
                           TensorBatchDataset)
 from .shape_converter import ShapeConverter
+import io
 
 # UTILITY FUNCTIONS
 
@@ -503,7 +504,8 @@ def torch2trt_dynamic(module,
                       keep_network=True,
                       int8_mode=False,
                       int8_calib_dataset=None,
-                      int8_calib_algorithm=DEFAULT_CALIBRATION_ALGORITHM):
+                      int8_calib_algorithm=DEFAULT_CALIBRATION_ALGORITHM,
+                      use_onnx=False):
 
     inputs_in = inputs
 
@@ -585,6 +587,28 @@ def torch2trt_dynamic(module,
 
     if keep_network:
         module_trt.network = network
+
+     if use_onnx:
+
+        f = io.BytesIO()
+        torch.onnx.export(module, inputs, f, input_names=input_names, output_names=output_names)
+        f.seek(0)
+        onnx_bytes = f.read()
+        network = builder.create_network(1 << int(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))
+        parser = trt.OnnxParser(network, logger)
+        parser.parse(onnx_bytes)
+
+    else:
+        network = builder.create_network(1 << int(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))
+        with ConversionContext(network, torch2trt_kwargs=kwargs, builder_config=config) as ctx:
+
+            ctx.add_inputs(inputs, input_names)
+
+            outputs = module(*inputs)
+
+            if not isinstance(outputs, tuple) and not isinstance(outputs, list):
+                outputs = (outputs,)
+            ctx.mark_outputs(outputs, output_names)
 
     return module_trt
 
