@@ -3,7 +3,7 @@
 import torch
 from torch2trt_dynamic.torch2trt_dynamic import get_arg, tensorrt_converter
 
-from .conv2d import convert_conv2d
+from .Conv2d_ import convert_Conv2d_
 
 
 @tensorrt_converter('torch.nn.functional.conv2d')
@@ -34,4 +34,4 @@ def convert_conv2d(ctx):
     module.bias = bias
 
     ctx.method_args = (module, ctx.method_args[0])
-    convert_Conv2d(ctx)
+    convert_Conv2d_(ctx)
