@@ -26,7 +26,7 @@ from .chunk import (convert_chunk, test_tensor_chunk_3_2, test_torch_chunk_1_1,
                     test_torch_chunk_3_2)
 from .clamp import convert_clamp, convert_clamp_max, convert_clamp_min
 from .Conv1d import convert_Conv1d
-from .Conv2d import convert_Conv2d
+from .Conv2d_ import convert_Conv2d_
 from .conv2d import convert_conv2d
 from .ConvTranspose1d import convert_ConvTranspose1d
 from .ConvTranspose2d import convert_ConvTranspose2d
