@@ -41,7 +41,7 @@ from .gelu import convert_gelu
 from .getitem import convert_tensor_getitem
 from .GRU import convert_GRU
 from .identity import convert_identity
-from .Identity import convert_Identity
+from .Identity_ import convert_Identity_
 from .index_select import convert_index_select
 from .instance_norm import convert_instance_norm
 from .interpolate_custom import convert_interpolate
@@ -160,7 +160,7 @@ __all__ += [
 # Conv1d
 __all__ += ['convert_Conv1d']
 # Conv2d
-__all__ += ['convert_Conv2d']
+__all__ += ['convert_Conv2d_']
 # conv2d
 __all__ += ['convert_conv2d']
 # ConvTranspose1d
@@ -188,7 +188,7 @@ __all__ += ['convert_GRU']
 # identity
 __all__ += ['convert_identity']
 # Identity
-__all__ += ['convert_Identity']
+__all__ += ['convert_Identity_']
 # index_select
 __all__ += ['convert_index_select']
 # instance_norm
