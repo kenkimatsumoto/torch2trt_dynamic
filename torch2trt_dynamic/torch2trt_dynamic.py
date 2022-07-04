@@ -588,7 +588,7 @@ def torch2trt_dynamic(module,
     if keep_network:
         module_trt.network = network
 
-     if use_onnx:
+    if use_onnx:
 
         f = io.BytesIO()
         torch.onnx.export(module, inputs, f, input_names=input_names, output_names=output_names)
