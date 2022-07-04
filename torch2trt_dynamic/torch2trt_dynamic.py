@@ -558,6 +558,28 @@ def torch2trt_dynamic(module,
                               max_shape)
         config.add_optimization_profile(profile)
 
+    if use_onnx:
+
+        f = io.BytesIO()
+        torch.onnx.export(module, inputs, f, input_names=input_names, output_names=output_names)
+        f.seek(0)
+        onnx_bytes = f.read()
+        network = builder.create_network(1 << int(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))
+        parser = trt.OnnxParser(network, logger)
+        parser.parse(onnx_bytes)
+
+    else:
+        network = builder.create_network(1 << int(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))
+        with ConversionContext(network, torch2trt_kwargs=kwargs, builder_config=config) as ctx:
+
+            ctx.add_inputs(inputs, input_names)
+
+            outputs = module(*inputs)
+
+            if not isinstance(outputs, tuple) and not isinstance(outputs, list):
+                outputs = (outputs,)
+            ctx.mark_outputs(outputs, output_names)
+
     if fp16_mode:
         if version.parse(trt.__version__) < version.parse('8'):
             builder.fp16_mode = fp16_mode
@@ -587,28 +609,6 @@ def torch2trt_dynamic(module,
 
     if keep_network:
         module_trt.network = network
-
-    if use_onnx:
-
-        f = io.BytesIO()
-        torch.onnx.export(module, inputs, f, input_names=input_names, output_names=output_names)
-        f.seek(0)
-        onnx_bytes = f.read()
-        network = builder.create_network(1 << int(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))
-        parser = trt.OnnxParser(network, logger)
-        parser.parse(onnx_bytes)
-
-    else:
-        network = builder.create_network(1 << int(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))
-        with ConversionContext(network, torch2trt_kwargs=kwargs, builder_config=config) as ctx:
-
-            ctx.add_inputs(inputs, input_names)
-
-            outputs = module(*inputs)
-
-            if not isinstance(outputs, tuple) and not isinstance(outputs, list):
-                outputs = (outputs,)
-            ctx.mark_outputs(outputs, output_names)
 
     return module_trt
 
