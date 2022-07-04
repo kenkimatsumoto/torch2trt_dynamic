@@ -3,7 +3,7 @@
 import torch
 from torch2trt_dynamic.torch2trt_dynamic import get_arg, tensorrt_converter
 
-from .Conv2d import convert_Conv2d
+from .conv2d import convert_conv2d
 
 
 @tensorrt_converter('torch.nn.functional.conv2d')
