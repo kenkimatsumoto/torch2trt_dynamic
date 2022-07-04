@@ -46,7 +46,7 @@ from .index_select import convert_index_select
 from .instance_norm import convert_instance_norm
 from .interpolate_custom import convert_interpolate
 from .LayerNorm import convert_LayerNorm
-from .Linear import convert_Linear
+from .Linear_ import convert_Linear_
 from .linear import convert_linear
 from .linspace import convert_linspace
 from .logical import (convert_and, convert_equal, convert_greater,
@@ -77,9 +77,9 @@ from .pow import convert_pow, convert_rpow
 from .prelu import convert_prelu
 from .prod import convert_prod
 from .relu import convert_relu
-from .ReLU import convert_ReLU
+from .ReLU_ import convert_ReLU_
 from .relu6 import convert_relu6
-from .ReLU6 import convert_ReLU6
+from .ReLU6_ import convert_ReLU6_
 from .repeat import convert_expand, convert_expand_as, convert_repeat
 from .roll import convert_roll
 from .sigmoid import convert_sigmoid
@@ -198,7 +198,7 @@ __all__ += ['convert_interpolate']
 # LayerNorm
 __all__ += ['convert_LayerNorm']
 # Linear
-__all__ += ['convert_Linear']
+__all__ += ['convert_Linear_']
 # linear
 __all__ += ['convert_linear']
 # linspace
@@ -266,11 +266,11 @@ __all__ += ['convert_prod']
 # relu
 __all__ += ['convert_relu']
 # ReLU
-__all__ += ['convert_ReLU']
+__all__ += ['convert_ReLU_']
 # relu6
 __all__ += ['convert_relu6']
 # ReLU6
-__all__ += ['convert_ReLU6']
+__all__ += ['convert_ReLU6_']
 # sigmoid
 __all__ += ['convert_sigmoid']
 # size

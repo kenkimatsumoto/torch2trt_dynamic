@@ -1,7 +1,7 @@
 import torch
 
 from ..torch2trt_dynamic import get_arg, tensorrt_converter
-from .Linear import convert_Linear
+from .Linear_ import convert_Linear_
 
 
 @tensorrt_converter('torch.nn.functional.linear')
@@ -23,7 +23,7 @@ def convert_linear(ctx):
 
     ctx.method_args = [module, input]
     ctx.method_kwargs = {}
-    convert_Linear(ctx)
+    convert_Linear_(ctx)
 
     ctx.method_args = old_method_args
     ctx.method_kwargs = old_method_kwargs

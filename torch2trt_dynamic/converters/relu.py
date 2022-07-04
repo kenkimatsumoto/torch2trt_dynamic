@@ -1,7 +1,7 @@
 import torch
 from torch2trt_dynamic.torch2trt_dynamic import tensorrt_converter
 
-from .ReLU import convert_ReLU
+from .ReLU_ import convert_ReLU_
 
 
 @tensorrt_converter('torch.relu')
@@ -10,4 +10,4 @@ from .ReLU import convert_ReLU
 @tensorrt_converter('torch.nn.functional.relu_')
 def convert_relu(ctx):
     ctx.method_args = (torch.nn.ReLU(), ) + ctx.method_args
-    convert_ReLU(ctx)
+    convert_ReLU_(ctx)
